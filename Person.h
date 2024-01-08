@@ -1,7 +1,9 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
 #include <string>
+#include <vector>
 
+// Base class
 class Person
 {
     private:
@@ -16,6 +18,38 @@ class Person
         void setAddress(std::string address);
         std::string getEmail();
         void setEmail(std::string email);
+};
+
+// Derived class inheriting from Person
+class Librarian: public Person
+{
+    private:
+        int staffID;
+        int salary;
+    public:
+        Librarian(int staffID, std::string name, std::string address, std::string email, int salary);
+        void addMember();
+        void issueBook(int memberID, int bookID);
+        void returnBook(int memberID, int bookID);
+        void displayBorrowedBooks(int memberID);
+        void calcFine(int memberID);
+        int getStaffID();
+        void setStaffID(int staffID);
+        int getSalary();
+        void setSalary(int salary);
+};
+
+// Derived class inheriting from Person
+class Member: public Person
+{
+    private:
+        int memberID;
+        std::vector<Book> booksLoaned;
+    public:
+        Member (int memberID, std::string name, std::string address, std::string email);
+        std::int getMemberId();
+        std::vector<Book> getBooksBorrowed();
+        void setBooksBorrowed(Book& book);
 };
 
 #endif
