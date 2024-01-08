@@ -14,7 +14,7 @@ class Book
         Member& borrower();
     public:
         Book(int bookID, std::string bookName, std::string authorFirstName, std::string authorLastName);
-        virtual ~Book();
+        ~Book();
         std::string getBookID();
         std::string getBookName();
         std::string getAuthorFirstName();
