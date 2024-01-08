@@ -47,7 +47,7 @@ class Member: public Person
         std::vector<Book> booksLoaned;
     public:
         Member (int memberID, std::string name, std::string address, std::string email);
-        std::int getMemberId();
+        std::string getMemberId();
         std::vector<Book> getBooksBorrowed();
         void setBooksBorrowed(Book& book);
 };
