@@ -41,9 +41,9 @@ void login(){
     cin >> sID;
 
     // validate login
-    for (int i=0; i<librarians.size(); i++){
-        if(sID == librarians[i].getStaffID){
-            cout << "\n" << "Welcome " << bookseller.getName();
+    for (int i=0; i < (int)librarians.size(); i++){
+        if(sID == librarians[i].getStaffID()){
+            cout << "\n" << "Welcome " << librarians[i].getName();
         } else {
             cout << "\n" << "Incorrect. Try again!" << endl;
             login();
@@ -70,7 +70,7 @@ void add_librarian(){
     cout << "Enter salary: ";
     cin >> salary;
 
-    librarians.push_back(Librarian bookseller(sID, name, address, email, salary));
+    librarians.push_back(Librarian(sID, name, address, email, salary));
 
     cout << "\n" << "Staff ID number: " << sID << " has been created successfully" << endl;
     cout << "\n";

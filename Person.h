@@ -2,6 +2,9 @@
 #define _PERSON_H_
 #include <string>
 #include <vector>
+#include "Book.h"
+
+class Book;
 
 // Base class
 class Person
@@ -49,7 +52,7 @@ class Member: public Person
         Member (int memberID, std::string name, std::string address, std::string email);
         std::string getMemberId();
         std::vector<Book> getBooksBorrowed();
-        void setBooksBorrowed(Book& book);
+        void setBooksBorrowed(Book book);
 };
 
 #endif

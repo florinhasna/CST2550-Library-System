@@ -43,9 +43,12 @@ void Person::setEmail(std::string email)
 // LIBRARIAN DERIVED CLASS METHODS
 
 // constructor
-Librarian::Librarian(int staffID, std::string name, std::string address, std::string email, int salary) : Person(name, address, email)
+Librarian::Librarian(int staffID, std::string name, std::string address, std::string email, int salary)
 {
     this->staffID = staffID;
+    setName(name);
+    setAddress(address);
+    setEmail(email);
     this->salary = salary;
 }
 
@@ -69,9 +72,9 @@ Librarian::Librarian(int staffID, std::string name, std::string address, std::st
 // {
 // }
 
-std::string Librarian::getStaffID()
+int Librarian::getStaffID()
 {
-    return std::to_string(staffID);
+    return staffID;
 }
 
 void Librarian::setStaffID(int staffID)
@@ -92,15 +95,18 @@ void Librarian::setSalary(int salary)
 // MEMBER DERIVED CLASS METHODS 
 
 // constructor       
-Member::Member (int memberID, std::string name, std::string address, std::string email) : Person(name, address, email)
+Member::Member (int memberID, std::string name, std::string address, std::string email)
 {
     this->memberID = memberID;
+    setName(name);
+    setAddress(address);
+    setEmail(email);
 }
 
 // returns the ID as a string
-int Member::getMemberId() 
+std::string Member::getMemberId() 
 {
-      return memberID;
+      return std::to_string(memberID);
 }
 
 // // returns a vector of borrowed books
@@ -109,6 +115,6 @@ int Member::getMemberId()
 // }
 
 // // add a new book borrow
-// void Member::setBooksBorrowed(Book& book)
+// void Member::setBooksBorrowed(Book book)
 // {
 // }
