@@ -6,8 +6,10 @@ using namespace std;
 void start(); // initialize the program
 void add_librarian(); // create a Librarian object
 void login(); // login to the Librarian account
+void load_menu(); // loads menu after login
 
 vector<Librarian> librarians;
+Librarian* logged_in;
 
 int main(){
     start();
@@ -30,23 +32,33 @@ void start(){
     switch(choice){
         case 1: login(); break;
         case 2: add_librarian(); break;
-        case 3: break;
+        case 3: cout << "Exiting program..."; 
     }
 }
 
 // A librarian authenticating with his staffID
 void login(){
+    // check if there is any account created for a librarian
+    if (librarians.size() == 0){
+        cout << "There are no accounts created, you need to create an account... redirecting" << "\n" << endl;
+        add_librarian();
+    }
+
     cout << "Enter staff ID to authenticate: ";
     int sID;
     cin >> sID;
 
     // validate login
-    for (int i=0; i < (int)librarians.size(); i++){
+    for (int i=0; i < (int) librarians.size(); i++){
         if(sID == librarians[i].getStaffID()){
             cout << "\n" << "Welcome " << librarians[i].getName();
-        } else {
-            cout << "\n" << "Incorrect. Try again!" << endl;
-            login();
+            logged_in = &librarians[i];
+            load_menu();
+            break;
+        } 
+
+        if (i == (int) librarians.size() - 1 && !(sID == librarians[i].getStaffID())){
+            cout << "Incorrect staff ID, try again... " << endl;
         }
     }  
 }
@@ -76,4 +88,29 @@ void add_librarian(){
     cout << "\n";
 
     start();
+}
+
+void load_menu(){
+    int choice;
+    do{
+        cout << "Please select a valid option: " << "\n\n";
+        cout << "1. Add a member" << endl;
+        cout << "2. Issue a book" << endl;
+        cout << "3. Return a book" << endl;
+        cout << "4. Display the books borrowed by a member" << endl;
+        cout << "5. Logout" << endl;
+        cout << "\n";
+        cin >> choice;
+    } while(!(choice > 0 && choice < 6));
+    
+    switch(choice){
+        case 1: logged_in->addMember(); break;
+        case 2: break;
+        case 3: break;
+        case 4: break;
+        case 5: cout << "Logging out..." << "\n"; 
+                start();
+    }
+
+
 }
