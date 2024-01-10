@@ -1,10 +1,8 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
-#include <string>
+#include <iostream>
 #include <vector>
 #include "Book.h"
-
-class Book;
 
 // Base class
 class Person
@@ -24,6 +22,19 @@ class Person
 };
 
 // Derived class inheriting from Person
+class Member: public Person
+{
+    private:
+        int memberID;
+        std::vector<Book*> booksLoaned;
+    public:
+        Member (int memberID, std::string name, std::string address, std::string email);
+        std::string getMemberId();
+        std::vector<Book*> getBooksBorrowed();
+        void setBooksBorrowed(Book* book);
+};
+
+// Derived class inheriting from Person
 class Librarian: public Person
 {
     private:
@@ -40,19 +51,6 @@ class Librarian: public Person
         void setStaffID(int staffID);
         int getSalary();
         void setSalary(int salary);
-};
-
-// Derived class inheriting from Person
-class Member: public Person
-{
-    private:
-        int memberID;
-        std::vector<Book> booksLoaned;
-    public:
-        Member (int memberID, std::string name, std::string address, std::string email);
-        std::string getMemberId();
-        std::vector<Book> getBooksBorrowed();
-        void setBooksBorrowed(Book book);
 };
 
 #endif

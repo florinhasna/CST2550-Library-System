@@ -54,6 +54,6 @@ void Book::setDueDate(Date dueDate)
 // }
 
 // // set borrower and dueDate
-// void Book::borrowBook(Member& borrower, Date dueDate)
+// void Book::borrowBook(Member* borrower, Date dueDate)
 // {
 // }

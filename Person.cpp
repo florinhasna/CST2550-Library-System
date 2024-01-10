@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Person.h"
 
 Person::~Person() // destructor
@@ -61,11 +60,13 @@ std::string Member::getMemberId()
 // // returns a vector of borrowed books
 // std::vector<Book> Member::getBooksBorrowed() 
 // {
+//     return booksLoaned;
 // }
 
 // // add a new book borrow
 // void Member::setBooksBorrowed(Book book)
 // {
+//     this->booksLoaned.push_back(book);
 // }
 
 std::vector<Member> members;
@@ -90,19 +91,15 @@ void Librarian::addMember()
     // read in new member details
     std::cout << "Enter a unique member ID: ";
     std::cin >> mID;
+    std::cin.ignore();
     std::cout << "Enter name: ";
     std::getline(std::cin, name);
-    std::cin.ignore(); // read a line
     std::cout << "Enter address: ";
     std::getline(std::cin, address);
-    std::cin.ignore();
     std::cout << "Enter E-Mail: ";
-    std::cin >> email;
+    std::getline(std::cin, email);
 
     members.push_back(Member(mID, name, address, email));
-    std::cout << members[0].getMemberId();
-    std::cout << members[0].getName();
-    std::cout << members[0].getEmail();
 }
 
 // void Librarian::issueBook(int memberID, int bookID)
