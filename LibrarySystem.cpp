@@ -8,14 +8,17 @@ void start(); // initialize the program
 void add_librarian(); // create a Librarian object
 void login(); // login to the Librarian account
 void load_menu(); // loads menu after login
+// Date calculate_due_date();
 
-vector<Librarian> librarians;
-vector<Book> books;
 Librarian* logged_in;
 
-int main(){
+int main()
+{
+    cout << "Initialising program... " << endl;
+    cout << "Putting books on the shelf... " << "\n\n";
+    load_books();
+    cout << "The program is ready to be used!" << "\n\n";
     do{
-        load_books();
         start();
     } while(true);
     return 0;
@@ -23,8 +26,6 @@ int main(){
 
 void load_books()
 {
-    cout << "Putting books on the shelf... " << "\n\n";  
-
     ifstream booksFile("library_books.csv"); // open the file
 
     // check if the file is open
@@ -155,7 +156,8 @@ void load_menu()
 {
     int choice;
     do{
-        cout << "Please select a valid option: " << "\n\n";
+        do{
+        cout << "Please select an option: " << "\n";
         cout << "1. Add a member" << endl;
         cout << "2. Issue a book" << endl;
         cout << "3. Return a book" << endl;
@@ -163,14 +165,15 @@ void load_menu()
         cout << "5. Logout" << endl;
         cout << "\n";
         cin >> choice;
-    } while(!(choice > 0 && choice < 6));
-    
-    switch(choice){
-        case 1: logged_in->addMember(); break;
-        case 2: break;
-        case 3: break;
-        case 4: break;
-        case 5: cout << "Logging out..." << "\n\n"; 
-                logged_in = nullptr;
-    }
+        } while(!(choice > 0 && choice < 6));
+        
+        switch(choice){
+            case 1: logged_in->addMember(); break;
+            case 2: logged_in->issueBook(1990, 167); break;
+            case 3: break;
+            case 4: logged_in->displayBorrowedBooks(1990); break;
+            case 5: cout << "Logging out..." << "\n\n"; 
+                    logged_in = nullptr;
+        }
+    } while(choice != 5);
 }
