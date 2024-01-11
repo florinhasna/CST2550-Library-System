@@ -8,7 +8,10 @@ void start(); // initialize the program
 void add_librarian(); // create a Librarian object
 void login(); // login to the Librarian account
 void load_menu(); // loads menu after login
-// Date calculate_due_date();
+void issue_book();
+void return_book();
+void display_books();
+void calculate_fine();
 
 Librarian* logged_in;
 
@@ -24,16 +27,22 @@ int main()
     return 0;
 }
 
-void load_books()
+void load_books() // loading books from csv file to books vector
 {
-    ifstream booksFile("library_books.csv"); // open the file
+    string file = "library_books";
 
-    // check if the file is open
-    if (!booksFile.is_open()) {
-        cerr << "Error opening the file, exiting..." << endl;
-        exit(1); // exit error 1
-    }
-    
+    ifstream booksFile(file.append(".csv")); // open the file
+
+    do{
+        // check if the file is open
+        if (!booksFile.is_open()) {
+            cerr << "Error opening the file, the name of the file was altered or moved." << "\n" <<" Specify the name or path..." << endl;
+            cout << "DO NOT INCLUDE THE FILE FORMAT! Waiting input: ";
+            booksFile.open(file.append(".csv"));
+            cin >> file;
+        }
+    } while(!booksFile.is_open());
+
     string line;
 
     int row_number = 0;
@@ -72,6 +81,8 @@ void load_books()
         aBook.clear();
         row_number++;
     }
+
+    cout <<"Books loaded successfuly!" << "\n\n";
 
     booksFile.close();
 }
@@ -159,21 +170,65 @@ void load_menu()
         do{
         cout << "Please select an option: " << "\n";
         cout << "1. Add a member" << endl;
-        cout << "2. Issue a book" << endl;
+        cout << "2. Issue a book to a member" << endl;
         cout << "3. Return a book" << endl;
         cout << "4. Display the books borrowed by a member" << endl;
-        cout << "5. Logout" << endl;
+        cout << "5. Calculate fines of a member" << endl;
+        cout << "6. Logout" << endl;
         cout << "\n";
         cin >> choice;
-        } while(!(choice > 0 && choice < 6));
+        } while(!(choice > 0 && choice < 7));
         
         switch(choice){
-            case 1: logged_in->addMember(); break;
-            case 2: logged_in->issueBook(1990, 167); break;
-            case 3: break;
-            case 4: logged_in->displayBorrowedBooks(1990); break;
-            case 5: cout << "Logging out..." << "\n\n"; 
+            case 1: logged_in->addMember();     
+                    cout << "\n"; 
+                    break;
+            case 2: issue_book(); break;
+            case 3: return_book(); break;
+            case 4: display_books(); break;
+            case 5: calculate_fine(); break;
+            case 6: cout << "Logging out..." << "\n\n"; 
                     logged_in = nullptr;
         }
-    } while(choice != 5);
+    } while(choice != 6);
+}
+
+void issue_book()
+{
+    int mID, bID;
+    cout << "Enter member ID of the person who would like to borrow: ";
+    cin >> mID;
+    cout << "Enter the desired book ID: ";
+    cin >> bID;
+    logged_in->issueBook(mID, bID);
+    cout << endl;
+}
+
+void display_books()
+{
+    int mID;
+    cout << "Enter member ID to see books borrowed by that person: ";
+    cin >> mID;
+    logged_in->displayBorrowedBooks(mID);
+    cout << endl;
+}
+
+void calculate_fine() 
+{
+    int mID;
+    cout << "Enter member ID to see outstanding fine/s: ";
+    cin >> mID;
+    logged_in->calcFine(mID);
+    cout << endl;
+}
+
+void return_book()
+{
+    int mID, bID;
+    cout << "Enter member ID of the person who would like to return: ";
+    cin >> mID;
+    cout << "Enter book ID of the book to be returned: ";
+    cin >> bID;
+    logged_in->returnBook(mID, bID);
+    cout << endl;
 }
