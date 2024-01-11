@@ -1,9 +1,19 @@
 #ifndef _BOOK_H_
 #define _BOOK_H_
 #include <string>
+#include <ctime>
+#include <vector>
 
 class Member;
-struct Date{};
+
+struct Date{
+    int year;
+    int month;
+    int day;
+
+    std::string getCurrentDay();
+    std::string getDueDate();
+};
 
 class Book
 {
@@ -14,7 +24,7 @@ class Book
         std::string authorLastName;
         std::string bookType;
         Date dueDate;
-        Member* borrower();
+        Member* borrower;
     public:
         Book(int bookID, std::string bookName, std::string authorFirstName, std::string authorLastName);
         ~Book();
@@ -25,7 +35,9 @@ class Book
         Date getDueDate();
         void setDueDate(Date dueDate);
         void returnBook();
-        void borrowBook(Member* borrower, Date dueDate);
+        void borrowBook(Member& borrower, Date dueDate);
 };
+
+extern std::vector<Book> books;
 
 #endif
