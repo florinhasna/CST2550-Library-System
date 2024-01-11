@@ -1,7 +1,6 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
 #include <iostream>
-#include <vector>
 #include "Book.h"
 
 // Base class
@@ -52,5 +51,8 @@ class Librarian: public Person
         int getSalary();
         void setSalary(int salary);
 };
+
+extern std::vector<Member> members;
+extern std::vector<Librarian> librarians;
 
 #endif
