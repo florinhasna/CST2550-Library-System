@@ -71,7 +71,15 @@ std::vector<Book*> Member::getBooksBorrowed()
 // add a new book borrow
 void Member::setBooksBorrowed(Book* book)
 {
-    this->booksLoaned.push_back(book);
+    auto it = std::find(this->booksLoaned.begin(), this->booksLoaned.end(), book);
+    if(it != this->booksLoaned.end()){
+        this->booksLoaned.erase(it);
+        std::cout << book->getBookName() << " has been returned successfuly." << "\n";
+    } else {
+        this->booksLoaned.push_back(book);
+    }
+
+    std::cout << (int)this->booksLoaned.size();
 }
 
 // LIBRARIAN DERIVED CLASS METHODS
@@ -118,7 +126,9 @@ void Librarian::issueBook(int memberID, int bookID)
         }
     }
 
-    if(flag) {
+    if(!flag){
+        std::cout << "MemberID is invalid, try again..." << "\n\n";
+    } else {
         flag=false;
         for(int i = 0; i < (int) books.size(); i++){
             if(books[i].getBookID() == std::to_string(bookID)){
@@ -127,8 +137,13 @@ void Librarian::issueBook(int memberID, int bookID)
             }
 
             if(flag){
-                book->borrowBook(*borrower, date_object);
-                borrower->setBooksBorrowed(book);
+                try{
+                    book->borrowBook(*borrower, date_object);
+                    borrower->setBooksBorrowed(book);
+                    std::cout << "\n" << "The book " << book->getBookName() << " was issued to " << borrower->getName() << "\n\n";
+                } catch (const std::exception& e) {
+                    std::cerr << "The specified book was borrowed by someone else. " << std::endl;
+                }
                 break;
             }
         }
@@ -136,27 +151,45 @@ void Librarian::issueBook(int memberID, int bookID)
         if(!flag) {
             std::cout << "BookID is invalid, try again..." << "\n\n";
         }
-    } else {
-        std::cout << "MemberID is invalid, try again..." << "\n\n";
     }
 }
 
-// void Librarian::returnBook(int memberID, int bookID)
-// {
-// }
+void Librarian::returnBook(int memberID, int bookID)
+{
+    for(int i = 0; i < (int) members.size(); i++){
+        if(members[i].getMemberId() == std::to_string(memberID)){
+            std::vector<Book*> borrowed = members[i].getBooksBorrowed();
+
+            for(int i = 0; i < (int) borrowed.size(); i++){
+                if(borrowed[i]->getBookID() == std::to_string(bookID)){
+                    members[i].setBooksBorrowed(borrowed[i]);
+                    borrowed[i]->returnBook();
+                }
+            }
+            break;
+        }
+    }
+
+    this->calcFine(memberID);
+}
 
 void Librarian::displayBorrowedBooks(int memberID)
 {
     for(int i = 0; i < (int) members.size(); i++){
         if(members[i].getMemberId() == std::to_string(memberID)){
             std::vector<Book*> borrowed = members[i].getBooksBorrowed();
-            std::cout << "The books borrowed by " << members[i].getName() << " are : " << "\n";
+
+            if((int) borrowed.size() == 0){
+                std::cout << "\n" << members[i].getName() << " does not have any books borrowed." << "\n";
+                break;
+            }
+
+            std::cout << "\n" << "The books borrowed by " << members[i].getName() << " are : " << "\n";
 
             for(int i = 0; i < (int) borrowed.size(); i++){
                 std::cout << i+1 << ". " << borrowed[i]->getBookName() << " written by " << borrowed[i]->getAuthorFirstName() << " ";
                 std::cout << borrowed[i]->getAuthorLastName() <<"\n";
                 std::cout << "   - To be returned no later than: " << borrowed[i]->getDueDate().getDueDate() << "\n";
-                std::cout << "------------------------------------------------------------" << "\n";
             }
             break;
         }
@@ -204,13 +237,3 @@ void Librarian::setSalary(int salary)
 {
     this->salary = salary;
 }
-
-// std::bool bookID_validity(int id, vector<Book> aVector){
-//     flag=false;
-//     for(int i = 0; i < (int) aVector.size(); i++){
-//         if(aVector[i].getBookID() == std::to_string(id)){
-//             flag = true;
-//         }
-//     }
-//     return flag;
-// }
