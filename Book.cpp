@@ -22,9 +22,39 @@ std::string Date::getCurrentDay(){
 std::string Date::getDueDate(){
     this->year = now->tm_year + 1900;
     this->month = now->tm_mon + 1;
-    this->day = now->tm_mday + 3;
+    this->day = now->tm_mday;
 
     std::string result;
+
+    int days_in_month;
+
+    // months with 30 days
+    if (this->month == 4 || this->month == 6 || this->month == 9 || this->month == 11){
+        days_in_month = 30;  
+    } else if(this->month == 2) { // february
+        // checking if is a leap year or not
+        if(this->year % 4 == 0){
+            days_in_month = 29;
+        } else {
+            days_in_month = 28;
+        }
+    } else { // other months with 31
+        days_in_month = 31;
+    }
+
+    // if changes month
+    if (this->day + 2 > days_in_month){
+        this->day = this->day + 2 - days_in_month;
+        this->month = this->month + 1;
+
+        // if changes year
+        if (this->month + 1 > 12){
+            this->year = this->year + 1;
+            this->month = 1;
+        }
+    } else {
+        this->day = this->day + 2; 
+    }
 
     result.append(std::to_string(this->day));
     result.append("/");
@@ -92,8 +122,12 @@ void Book::returnBook()
 // set borrower and dueDate
 void Book::borrowBook(Member& borrower, Date dueDate)
 {
-    this->borrower = &borrower;
-    this->dueDate = dueDate;
+    if(this->borrower != nullptr){
+        this->borrower = &borrower;
+        this->dueDate = dueDate;
+    } else {
+        throw std::invalid_argument("Already borrowed");
+    }
 }
 
 std::vector<Book> books;

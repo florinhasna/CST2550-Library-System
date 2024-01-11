@@ -3,6 +3,8 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <stdexcept>
+#include <algorithm>
 
 class Member;
 
