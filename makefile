@@ -4,11 +4,14 @@ CXXFLAGS = -g -Wall -Wextra -Wpedantic
 .PHONY : all
 all : program class_tests
 
-program : LibrarySystem.cpp Book.o Person.o 
+program : LibrarySystem.cpp HelperFunctions.o Book.o Person.o 
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-class_tests : ClassTests.cpp Book.o Person.o 
+class_tests : ClassTests.cpp HelperFunctions.o Book.o Person.o 
 	$(CXX) $(CXXFLAGS) -o $@ $^
+
+HelperFunctions.o : HelperFunctions.cpp HelperFunctions.h
+	$(CXX) $(CXXFLAGS) -c $<
 
 Book.o : Book.cpp Book.h
 	$(CXX) $(CXXFLAGS) -c $<
