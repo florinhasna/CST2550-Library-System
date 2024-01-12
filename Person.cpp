@@ -1,7 +1,7 @@
 #include "Person.h"
 
-std::vector<Member> members;
-std::vector<Librarian> librarians;
+vector<Member> members;
+vector<Librarian> librarians;
 Date date_object;
 
 Person::~Person() // destructor
@@ -9,37 +9,37 @@ Person::~Person() // destructor
 }
 
 // returns name
-std::string Person::getName() 
+string Person::getName() 
 {
     return name;
 }
 
 // sets new name
-void Person::setName(std::string name) 
+void Person::setName(string name) 
 {
     this->name = name;
 }
 
 // returns address
-std::string Person::getAddress() 
+string Person::getAddress() 
 {
     return address;
 }
 
 // sets new address
-void Person::setAddress(std::string address) 
+void Person::setAddress(string address) 
 {
     this->address = address;
 }
 
 // returns email
-std::string Person::getEmail() 
+string Person::getEmail() 
 {
     return email;
 }
 
 // sets new email
-void Person::setEmail(std::string email) 
+void Person::setEmail(string email) 
 {
     this->email = email;
 }
@@ -47,7 +47,7 @@ void Person::setEmail(std::string email)
 // MEMBER DERIVED CLASS METHODS 
 
 // constructor       
-Member::Member (int memberID, std::string name, std::string address, std::string email)
+Member::Member (int memberID, string name, string address, string email)
 {
     this->memberID = memberID;
     this->setName(name);
@@ -56,13 +56,13 @@ Member::Member (int memberID, std::string name, std::string address, std::string
 }
 
 // returns the ID as a string
-std::string Member::getMemberId() 
+string Member::getMemberId() 
 {
-      return std::to_string(memberID);
+      return to_string(memberID);
 }
 
 // returns a vector of borrowed books
-std::vector<Book*> Member::getBooksBorrowed() 
+vector<Book*> Member::getBooksBorrowed() 
 {
     return booksLoaned;
 }
@@ -70,16 +70,16 @@ std::vector<Book*> Member::getBooksBorrowed()
 // add a new book borrow
 void Member::setBooksBorrowed(Book* book)
 {
-    if (!book) {
-        std::cout << "System error whilt trying to handle the request.\n"; // null pointer given
+    if (!book) { // null pointer given
+        cout << "System error whilt trying to handle the request.\n"; 
         return;
     }
 
-    auto it = std::find(this->booksLoaned.begin(), this->booksLoaned.end(), book);
+    auto it = find(this->booksLoaned.begin(), this->booksLoaned.end(), book);
 
     if (it != this->booksLoaned.end()) {
         it = this->booksLoaned.erase(it); // Erase the borrowed book and update the iterator
-        std::cout << book->getBookName() << " has been returned successfully.\n";
+        cout << book->getBookName() << " has been returned successfully.\n";
     } else {
         this->booksLoaned.push_back(book);
     }
@@ -88,7 +88,7 @@ void Member::setBooksBorrowed(Book* book)
 // LIBRARIAN DERIVED CLASS METHODS
 
 // constructor
-Librarian::Librarian(int staffID, std::string name, std::string address, std::string email, int salary)
+Librarian::Librarian(int staffID, string name, string address, string email, int salary)
 {
     this->staffID = staffID;
     this->setName(name);
@@ -99,177 +99,207 @@ Librarian::Librarian(int staffID, std::string name, std::string address, std::st
 
 void Librarian::addMember()
 {   
+    regex int_input("^[0-9]+$");
+    regex name_pattern("^[A-Za-z]{3,}\\s[A-Za-z]{3,}$");
+    regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
+    regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    
     int mID; // memberID
-    std::string name, address, email;
-    std::regex name_pattern("^[A-Za-z]{3,}\\s[A-Za-z]{3,}$");
-    std::regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
-    std::regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    string name, address, email;
 
     // read in librarian details
     do{
-        std::cout << "Enter a four numbers long unique staff ID: ";
-        std::cin >> mID;
+        cout << "Enter a four numbers long unique staff ID: ";
+        cin >> mID;
     } while (!(mID > 999 && mID < 10000));
 
-    std::cin.ignore();
+    cin.ignore();
 
     do {
-        std::cout << "Enter full name: ";
-        std::getline(std::cin, name);
-    } while(!std::regex_match(name, name_pattern));
+        cout << "Enter full name: ";
+        getline(cin, name);
+    } while(!regex_match(name, name_pattern));
     
     do{
-        std::cout << "Enter first line of address and postcode in capitals separated by a coma...\n";
-        std::cout << "e.g.: 35 Hendon Way, NW9 7FJ -> Waiting input: ";
-        std::getline(std::cin, address);
-    } while (!std::regex_match(address, address_pattern));
+        cout << "Enter first line of address and postcode in capitals separated by a coma...\n";
+        cout << "e.g.: 35 Hendon Way, NW9 7FJ -> Waiting input: ";
+        getline(cin, address);
+    } while (!regex_match(address, address_pattern));
     
     do {
-        std::cout << "Enter a valid E-Mail: ";
-        std::getline(std::cin, email);
-    } while (!std::regex_match(email, email_pattern));
+        cout << "Enter a valid E-Mail: ";
+        getline(cin, email);
+    } while (!regex_match(email, email_pattern));
 
     members.push_back(Member(mID, name, address, email));
+
+    cout << "\nThe member " << name << " has been successfuly created.\n\n Data received:\n";
+    cout << "NAME: " << name << endl;
+    cout << "ADDRESS: " << address << endl;
+    cout << "EMAIL: " << email << endl;
+    cout << "MEMBER ID: " << mID << endl; 
 }
 
 void Librarian::issueBook(int memberID, int bookID)
 {
-    bool flag = false;
     Member* borrower;
     Book* book;
-    for(int i = 0; i < (int) members.size(); i++){
-        if(members[i].getMemberId() == std::to_string(memberID)){
-            flag = true;
-            borrower = &members[i];
-            break;
-        }
-    }
+    int member_position;
+    member_position = get_member_position(memberID);
 
-    if(!flag){
-        std::cout << "MemberID is invalid, try again..." << "\n\n";
+    if(member_position >= 0){
+        borrower = &members[member_position];
+
+        member_position = get_book_position(bookID);
+        if(member_position >=0){
+            book = &books[member_position];
+        } else {
+            cout << "BookID is invalid, try again...\n";
+            return;
+        }
+
+        try{
+            book->borrowBook(*borrower, date_object);
+        } catch (const exception& e) {
+            cout << "\nThe book was already borrowed...\n";
+            return;
+        }
+
+        borrower->setBooksBorrowed(book);
+        cout << "\nThe book " << book->getBookName();
+        cout << " was issued to " << borrower->getName() << "\n";
     } else {
-        flag=false;
-        for(int i = 0; i < (int) books.size(); i++){
-            if(books[i].getBookID() == std::to_string(bookID)){
-                flag = true;
-                book = &books[i];
-            }
-
-            if(flag){
-                try{
-                    book->borrowBook(*borrower, date_object);
-                } catch (const std::exception& e) {
-                    break;
-                }
-                
-                borrower->setBooksBorrowed(book);
-                std::cout << "\n" << "The book " << book->getBookName() << " was issued to " << borrower->getName() << "\n\n";
-                break;
-            }
-        }
-        
-        if(!flag) {
-            std::cout << "BookID is invalid, try again..." << "\n\n";
-        }
+        cout << "MemberID is invalid, try again...\n";
+        return;
     }
 }
 
 void Librarian::returnBook(int memberID, int bookID)
 {
-    for(int i = 0; i < (int) members.size(); i++){
-        if(members[i].getMemberId() == std::to_string(memberID)){
-            std::vector<Book*> borrowed = members[i].getBooksBorrowed();
+    int member_position;
+    int book_position;
 
-            for(int j = 0; j < (int) borrowed.size(); j++){
-                if(borrowed[j]->getBookID() == std::to_string(bookID)){
-                    members[i].setBooksBorrowed(borrowed[j]);
-                    borrowed[j]->returnBook();
-                }
-            }
-            break;
-        }
+    member_position = get_member_position(memberID);
+    book_position = get_book_position(bookID);
+
+    if(book_position < 0) {
+        cout << "BookID is invalid, try again...\n";
+        return;
     }
 
-    this->calcFine(memberID);
+    if (member_position >= 0){
+        vector<Book*> borrowed = members[member_position].getBooksBorrowed();
+
+        cout << "\n";
+        this->calcFine(memberID);
+        for (int i = 0; i < (int) borrowed.size(); i++){
+            if (borrowed[i]->getBookID() == to_string(bookID)){
+                members[member_position].setBooksBorrowed(borrowed[i]);
+                borrowed[i]->returnBook();
+                return;
+            }
+        }
+
+        cout << "The book was not borrowed by this member...\n";
+    } else {
+        cout << "MemberID is invalid, try again...\n";
+        return;
+    }
 }
 
 void Librarian::displayBorrowedBooks(int memberID)
 {
-    for(int i = 0; i < (int) members.size(); i++){
-        if(members[i].getMemberId() == std::to_string(memberID)){
-            std::vector<Book*> borrowed = members[i].getBooksBorrowed();
+    int member_position;
+    member_position = get_member_position(memberID);
 
-            if((int) borrowed.size() == 0){
-                std::cout << "\n" << members[i].getName() << " does not have any books borrowed." << "\n";
-                break;
-            }
+    if (member_position >= 0){
+        vector<Book*> borrowed = members[member_position].getBooksBorrowed();
 
-            std::cout << "\n" << "The books borrowed by " << members[i].getName() << " are : " << "\n";
-
-            for(int i = 0; i < (int) borrowed.size(); i++){
-                std::cout << i+1 << ". " << borrowed[i]->getBookName() << " written by " << borrowed[i]->getAuthorFirstName() << " ";
-                std::cout << borrowed[i]->getAuthorLastName() <<"\n";
-                std::cout << "   - To be returned no later than: " << borrowed[i]->getDueDate().getDueDate() << "\n";
-            }
-            break;
+        if (borrowed.empty()){
+            cout << "\n" << members[member_position].getName() << " does not have any books borrowed.\n";
+            return;
         }
+
+        cout << "\nThe books borrowed by " << members[member_position].getName() << " are : \n";
+
+        for(int book_position = 0; book_position < (int) borrowed.size(); book_position++){
+            cout << book_position + 1 << ". " << borrowed[book_position]->getBookName() << " written by " << borrowed[book_position]->getAuthorFirstName() << " ";
+            cout << borrowed[book_position]->getAuthorLastName() <<"\n";
+            cout << "   - To be returned no later than: " << borrowed[book_position]->getDueDate().getDueDate() << "\n";
+        }
+    } else {
+        cout << "MemberID is invalid, try again...\n";
+        return;
     }
 
-    std::cout << std::endl;
+    cout << endl;
 }
 
 void Librarian::calcFine(int memberID)
 {
-    Date today_date;
-    today_date.getCurrentDay();
-    for(int i = 0; i < (int) members.size(); i++){
-        if(members[i].getMemberId() == std::to_string(memberID)){
-            std::vector<Book*> borrowed = members[i].getBooksBorrowed();
+    int member_position;
+    member_position = get_member_position(memberID);
 
-            for(int j = 0; j < (int) borrowed.size(); j++){
-                int borrowal_day = borrowed[j]->getDueDate().day;
-                int borrowal_month = borrowed[j]->getDueDate().month;
+    if (member_position >= 0) {
+        Date today_date;
+        today_date.getCurrentDay(); // initialize with current date
+        vector<Book*> borrowed = members[member_position].getBooksBorrowed();
 
-                std::cout << "Borrowal day " << borrowal_day << " " << borrowal_month << std::endl;
-                std::cout << "Curr day " << today_date.day << " " << today_date.month << std::endl;
+        for(int j = 0; j < (int) borrowed.size(); j++){
+            vector<int> date;
+            string date_int;
+            istringstream book_due_date(borrowed[j]->getDueDate().getDueDate());
+            
+            // separate the date into number strings, add the conversion to int to date vector
+            while (getline(book_due_date, date_int, '/')){
+                date.push_back(stoi(date_int));
+            }
 
-                if(borrowal_month < today_date.month){
-                    int days_in_month;
-                    int overdue = today_date.day - 3;
+            int due_day = date[0];
+            int due_month = date[1];
+            // int due_year = date[2];
 
-                    for(int k = today_date.month - 1; k >= borrowal_month; k--){
-                        // months with 30 days
-                        if (k == 4 || k == 6 || k == 9 || k == 11){
-                            days_in_month = 30;  
-                        } else if(k == 2) { // february
-                            // checking if is a leap year or not
-                            if(today_date.year % 4 == 0){
-                                days_in_month = 29;
-                            } else {
-                                days_in_month = 28;
-                            }
-                        } else { // other months with 31
-                            days_in_month = 31;
+            if(due_month < today_date.month){
+
+                int days_in_month;
+                int overdue = today_date.day;
+
+                for(int k = today_date.month - 1; k >= due_month; k--){
+                    // months with 30 days
+                    if (k == 4 || k == 6 || k == 9 || k == 11){
+                        days_in_month = 30;  
+                    } else if(k == 2) { // february
+                        // checking if is a leap year or not
+                        if(today_date.year % 4 == 0){
+                            days_in_month = 29;
+                        } else {
+                            days_in_month = 28;
                         }
-
-                        overdue = overdue + days_in_month;
+                    } else { // other months with 31
+                        days_in_month = 31;
                     }
 
-                    std::cout << borrowed[j]->getBookName() << " is " << overdue - borrowal_day << " days overdue." << std::endl;
-                    std::cout << "   - A fine of " << overdue - borrowal_day << "£ has to be paid." << std::endl;  
+                    overdue = overdue + days_in_month;
+                }
+
+                cout << borrowed[j]->getBookName() << " is " << overdue - due_day << " days overdue." << endl;
+                cout << "   - A fine of " << overdue - due_day << "£ has to be paid." << endl;  
+            } else {
+                if (today_date.day > due_day){
+                    int overdue = today_date.day - due_day;
+                    cout << borrowed[j]->getBookName() << " is " << overdue << " days overdue." << endl;
+                    cout << "   - A fine of " << overdue << "£ has to be paid." << endl;
                 } else {
-                    if (today_date.day - borrowal_day > 3){
-                        std::cout << borrowed[j]->getBookName() << " is " << today_date.day - borrowal_day - 3 << " days overdue." << std::endl;
-                        std::cout << "   - A fine of " << today_date.day - borrowal_day - 3 << "£ has to be paid." << std::endl;
-                    } else {
-                        std::cout << "The member is not due any fine for the book " << borrowed[j]->getBookName() << "\n"; 
-                    }
+                    cout << "The member is not due any fine for the book: " << borrowed[j]->getBookName() << "\n";                 
                 }
             }
         }
+    } else {
+        cout << "MemberID is invalid, try again...\n";
+        return;
     }
 
-    std::cout << std::endl;
+    cout << endl;
 }
 
 int Librarian::getStaffID()
@@ -290,4 +320,32 @@ int Librarian::getSalary()
 void Librarian::setSalary(int salary)
 {
     this->salary = salary;
+}
+
+
+// part of helper functions
+int get_member_position(int mID)
+{
+    int error_flag = -1;
+
+    for (int i=0; i < (int) members.size(); i++){
+        if(members[i].getMemberId() == to_string(mID)){
+            return i;
+        }
+    }
+
+    return error_flag;
+}
+
+int get_book_position(int bID)
+{
+    int error_flag = -1;
+
+    for (int i=0; i < (int) books.size(); i++){
+        if(books[i].getBookID() == to_string(bID)){
+            return i;
+        }
+    }
+
+    return error_flag;
 }

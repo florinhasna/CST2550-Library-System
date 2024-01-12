@@ -1,6 +1,6 @@
 #ifndef _PERSON_H_
 #define _PERSON_H_
-#include "Book.h"
+#include "Book.h" // HelperFunctions.h already included in Book.h
 
 // Base class
 class Person
@@ -50,8 +50,5 @@ class Librarian: public Person
         int getSalary();
         void setSalary(int salary);
 };
-
-extern std::vector<Member> members;
-extern std::vector<Librarian> librarians;
 
 #endif

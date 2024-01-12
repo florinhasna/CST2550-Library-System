@@ -1,17 +1,4 @@
-#include "Person.h" // Book.h already included in Person.h
-#include <fstream>
-#include <sstream>
-using namespace std;
-
-void load_books(); // read books from a file
-void start(); // initialize the program
-void add_librarian(); // create a Librarian object
-void login(); // login to the Librarian account
-void load_menu(); // loads menu after login
-void issue_book();
-void return_book();
-void display_books();
-void calculate_fine();
+#include "Person.h" //  HelperFunctions.h and Book.h already included in Person.h
 
 Librarian* logged_in;
 
@@ -90,18 +77,21 @@ void load_books() // loading books from csv file to books vector
 void start()
 {
     // get and validate input of user of the desired action taken
-    int choice;
+    string choice;
+    int int_choice;
     do{
         cout << "Select one of the options to proceed (e.g. Select 1 to login to your librarian account): " << endl;
         cout << "1. Login" << endl;
         cout << "2. Create a librarian account" << endl;
         cout << "3. Exit" << "\n\n";
         cin >> choice;
-    } while(!(choice > 0 && choice < 4));
+
+        int_choice = read_and_convert_integers(choice);
+    } while(!(int_choice > 0 && int_choice < 4));
 
     cout << "\n";
 
-    switch(choice){
+    switch(int_choice){
         case 1: login(); break;
         case 2: add_librarian(); break;
         case 3: cout << "Exiting program..."; exit(0); 
@@ -138,19 +128,20 @@ void login()
 
 void add_librarian()
 {
-    // declare neccessary variables
-    int sID, salary;
-    string name, address, email;
+    regex int_input("^[0-9]+$");
     regex name_pattern("^[A-Za-z]{3,}\\s[A-Za-z]{3,}$");
     regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
     regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+    // declare neccessary variables
+    string sID, salary;
+    string name, address, email;
 
     // read in librarian details
     do{
         cout << "Enter a four numbers long unique staff ID: ";
         cin >> sID;
-    } while (!(sID > 999 && sID < 10000));
-
+    } while (!regex_match(sID, int_input) || check_staff_id(stoi(sID))); 
     cin.ignore();
 
     do {
@@ -172,30 +163,39 @@ void add_librarian()
     do{
         cout << "Enter annual salary: ";
         cin >> salary;
-    } while (!(salary > 1000));
+    } while (!regex_match(salary, int_input) && !(stoi(salary) > 1000));
 
-    librarians.push_back(Librarian(sID, name, address, email, salary));
+    librarians.push_back(Librarian(stoi(sID), name, address, email, stoi(salary)));
 
-    cout << "\n" << "Staff ID number: " << sID << " has been created successfully" << "\n\n";
+    cout << "\nThe librarian " << name << " has been successfuly created.\n\n Data received:\n";
+    cout << "NAME: " << name << endl;
+    cout << "ADDRESS: " << address << endl;
+    cout << "EMAIL: " << email << endl;
+    cout << "STAFF ID: " << sID << endl; 
+    cout << "SALARY: £" << salary << "\n\n";
 }
 
 void load_menu()
 {
-    int choice;
+    string choice;
+    int int_choice;
+    
     do{
         do{
-        cout << "Please select an option: " << "\n";
-        cout << "1. Add a member" << endl;
-        cout << "2. Issue a book to a member" << endl;
-        cout << "3. Return a book" << endl;
-        cout << "4. Display the books borrowed by a member" << endl;
-        cout << "5. Calculate fines of a member" << endl;
-        cout << "6. Logout" << endl;
-        cout << "\n";
-        cin >> choice;
-        } while(!(choice > 0 && choice < 7));
+            cout << "Please select an option: " << "\n";
+            cout << "1. Add a member" << endl;
+            cout << "2. Issue a book to a member" << endl;
+            cout << "3. Return a book" << endl;
+            cout << "4. Display the books borrowed by a member" << endl;
+            cout << "5. Calculate fines of a member" << endl;
+            cout << "6. Logout" << endl;
+            cout << "\n";
+            cin >> choice;
+
+            int_choice = read_and_convert_integers(choice);
+        } while(!(int_choice > 0 && int_choice < 7));
         
-        switch(choice){
+        switch(int_choice){
             case 1: logged_in->addMember();     
                     cout << "\n"; 
                     break;
@@ -206,7 +206,7 @@ void load_menu()
             case 6: cout << "Logging out..." << "\n\n"; 
                     logged_in = nullptr;
         }
-    } while(choice != 6);
+    } while(int_choice != 6);
 }
 
 void issue_book()
@@ -247,4 +247,33 @@ void return_book()
     cin >> bID;
     logged_in->returnBook(mID, bID);
     cout << endl;
+}
+
+bool check_member_id(int mID)
+{
+    if (members.empty())
+        return false;
+    
+    for(int i = 0; i < (int) members.size(); i++){
+        if(members[i].getMemberId() == to_string(mID)){
+            cout << "Member ID was already used, please enter a different one...\n\n";
+            return true;
+        }
+    }
+
+    return false;
+}
+bool check_staff_id(int sID)
+{
+    if (librarians.empty())
+        return false;
+    
+    for(int i = 0; i < (int) librarians.size(); i++){
+        if(librarians[i].getStaffID() == sID){
+            cout << "Staff ID was already used, please enter a different one...\n\n";
+            return true;
+        }
+    }
+
+    return false;
 }

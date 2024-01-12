@@ -1,24 +1,6 @@
 #ifndef _BOOK_H_
 #define _BOOK_H_
-#include <iostream>
-#include <string>
-#include <ctime>
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <regex>
-
-class Member;
-
-struct Date{
-    int year;
-    int month;
-    int day;
-
-    std::string getCurrentDay();
-    std::string getDueDate();
-    int getDay();
-};
+#include "HelperFunctions.h"
 
 class Book
 {
@@ -42,7 +24,5 @@ class Book
         void returnBook();
         void borrowBook(Member& borrower, Date dueDate);
 };
-
-extern std::vector<Book> books;
 
 #endif

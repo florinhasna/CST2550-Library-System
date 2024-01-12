@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
+#include "HelperFunctions.h"
 #include "Book.h"
 #include "Person.h"
 
