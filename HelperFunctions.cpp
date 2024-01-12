@@ -67,9 +67,13 @@ string Date::getDueDate(){
 
 int read_and_convert_integers(string input)
 {
+    if(input.empty()){
+        return -1;
+    }
+
     regex int_input("^[0-9]+$");
     if(!regex_match(input, int_input)){
-        cout << "\nYou need to select a numerical value...\n\n";
+        cout << "\nYou need to insert a numerical value...\n\n";
         return -1;
     } else {
         return stoi(input);

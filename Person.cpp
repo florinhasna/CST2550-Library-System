@@ -104,16 +104,17 @@ void Librarian::addMember()
     regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
     regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
     
-    int mID; // memberID
+    string mID; // memberID
     string name, address, email;
+    int int_mID;
 
+    cin.ignore();
     // read in librarian details
     do{
         cout << "Enter a four numbers long unique staff ID: ";
-        cin >> mID;
-    } while (!(mID > 999 && mID < 10000));
-
-    cin.ignore();
+        getline(cin, mID);
+        int_mID = read_and_convert_integers(mID);
+    } while (!(int_mID > 999 && int_mID < 10000) || check_member_id(int_mID));
 
     do {
         cout << "Enter full name: ";
@@ -131,13 +132,14 @@ void Librarian::addMember()
         getline(cin, email);
     } while (!regex_match(email, email_pattern));
 
-    members.push_back(Member(mID, name, address, email));
+    members.push_back(Member(int_mID, name, address, email));
 
-    cout << "\nThe member " << name << " has been successfuly created.\n\n Data received:\n";
+    cout << "\nThe member " << name << " has been successfuly created.\n\n";
+    cout <<  "Data received:\n";
     cout << "NAME: " << name << endl;
     cout << "ADDRESS: " << address << endl;
     cout << "EMAIL: " << email << endl;
-    cout << "MEMBER ID: " << mID << endl; 
+    cout << "MEMBER ID: " << int_mID << endl; 
 }
 
 void Librarian::issueBook(int memberID, int bookID)
@@ -348,4 +350,19 @@ int get_book_position(int bID)
     }
 
     return error_flag;
+}
+
+bool check_member_id(int mID)
+{
+    if (members.empty())
+        return false;
+    
+    for(int i = 0; i < (int) members.size(); i++){
+        if(members[i].getMemberId() == to_string(mID)){
+            cout << "Member ID was already used, please enter a different one...\n\n";
+            return true;
+        }
+    }
+
+    return false;
 }

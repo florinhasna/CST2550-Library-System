@@ -106,21 +106,26 @@ void login()
         cout << "There are no accounts created, you need to create an account... redirecting" << "\n" << endl;
         add_librarian();
     } else {
-        cout << "Enter staff ID to authenticate: ";
-        int sID;
-        cin >> sID;
+        cin.ignore();
+        string sID;
+        int int_sID = -1;
+        do{
+            cout << "Enter staff ID to authenticate: ";
+            getline(cin, sID);
+            int_sID = read_and_convert_integers(sID);
+        } while (int_sID == -1);
 
         // validate login
         for (int i=0; i < (int) librarians.size(); i++){
-            if(sID == librarians[i].getStaffID()){
+            if(int_sID == librarians[i].getStaffID()){
                 cout << "\n" << "Welcome " << librarians[i].getName() << "! ";
                 logged_in = &librarians[i];
                 load_menu();
                 break;
             } 
 
-            if (i == (int) librarians.size() - 1 && !(sID == librarians[i].getStaffID())){
-                cout << "Incorrect staff ID, try again... " << endl;
+            if (i == (int) librarians.size() - 1 && !(int_sID == librarians[i].getStaffID())){
+                cout << "\nIncorrect staff ID...\n\n";
             }
         }
     }      
@@ -128,7 +133,6 @@ void login()
 
 void add_librarian()
 {
-    regex int_input("^[0-9]+$");
     regex name_pattern("^[A-Za-z]{3,}\\s[A-Za-z]{3,}$");
     regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
     regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
@@ -136,13 +140,15 @@ void add_librarian()
     // declare neccessary variables
     string sID, salary;
     string name, address, email;
+    int int_sID, int_salary;
 
+    cin.ignore();
     // read in librarian details
     do{
         cout << "Enter a four numbers long unique staff ID: ";
-        cin >> sID;
-    } while (!regex_match(sID, int_input) || check_staff_id(stoi(sID))); 
-    cin.ignore();
+        getline(cin, sID);
+        int_sID = read_and_convert_integers(sID);
+    } while (!(int_sID > 999 && int_sID < 10000) || check_staff_id(int_sID)); 
 
     do {
         cout << "Enter full name: ";
@@ -162,17 +168,18 @@ void add_librarian()
     
     do{
         cout << "Enter annual salary: ";
-        cin >> salary;
-    } while (!regex_match(salary, int_input) && !(stoi(salary) > 1000));
+        getline(cin, salary);
+        int_salary = read_and_convert_integers(salary);
+    } while (!(int_salary > 1000));
 
-    librarians.push_back(Librarian(stoi(sID), name, address, email, stoi(salary)));
+    librarians.push_back(Librarian(int_sID, name, address, email, int_salary));
 
     cout << "\nThe librarian " << name << " has been successfuly created.\n\n Data received:\n";
     cout << "NAME: " << name << endl;
     cout << "ADDRESS: " << address << endl;
     cout << "EMAIL: " << email << endl;
-    cout << "STAFF ID: " << sID << endl; 
-    cout << "SALARY: £" << salary << "\n\n";
+    cout << "STAFF ID: " << int_sID << endl; 
+    cout << "SALARY: £" << int_salary << "\n\n";
 }
 
 void load_menu()
@@ -211,58 +218,81 @@ void load_menu()
 
 void issue_book()
 {
-    int mID, bID;
-    cout << "Enter member ID of the person who would like to borrow: ";
-    cin >> mID;
-    cout << "Enter the desired book ID: ";
-    cin >> bID;
-    logged_in->issueBook(mID, bID);
+    string mID, bID;
+    int int_mID = -1;
+    int int_bID = -1;
+    cin.ignore();
+    
+    do{
+        cout << "Enter member ID of the person who would like to borrow: ";
+        getline(cin, mID);
+        int_mID = read_and_convert_integers(mID);
+    } while (int_mID == -1);
+    
+    do{
+        cout << "Enter the desired book ID: ";
+        getline(cin, bID);
+        int_bID = read_and_convert_integers(bID);
+    } while (int_bID == -1);
+    
+    logged_in->issueBook(int_mID, int_bID);
     cout << endl;
 }
 
 void display_books()
 {
-    int mID;
-    cout << "Enter member ID to see books borrowed by that person: ";
-    cin >> mID;
-    logged_in->displayBorrowedBooks(mID);
+    string mID;
+    int int_mID = -1;
+    cin.ignore();
+
+    do{
+        cout << "Enter member ID to see books borrowed by that person: ";
+        getline(cin, mID);
+        int_mID = read_and_convert_integers(mID);
+    } while(int_mID == -1);
+
+    logged_in->displayBorrowedBooks(int_mID);
     cout << endl;
 }
 
 void calculate_fine() 
 {
-    int mID;
-    cout << "Enter member ID to see outstanding fine/s: ";
-    cin >> mID;
-    logged_in->calcFine(mID);
+    string mID;
+    int int_mID = -1;
+    cin.ignore();
+    do{
+        cout << "Enter member ID to see outstanding fines of a member: ";
+        getline(cin, mID);
+        int_mID = read_and_convert_integers(mID);
+    } while(int_mID == -1);
+    
+    logged_in->calcFine(int_mID);
     cout << endl;
 }
 
 void return_book()
 {
-    int mID, bID;
-    cout << "Enter member ID of the person who would like to return: ";
-    cin >> mID;
-    cout << "Enter book ID of the book to be returned: ";
-    cin >> bID;
-    logged_in->returnBook(mID, bID);
+    string mID, bID;
+    int int_mID = -1;
+    int int_bID = -1;
+    cin.ignore();
+    
+    do{
+        cout << "Enter member ID of the person who would like to return: ";
+        getline(cin, mID);
+        int_mID = read_and_convert_integers(mID);
+    } while (int_mID == -1);
+    
+    do{
+        cout << "Enter the book ID: ";
+        getline(cin, bID);
+        int_bID = read_and_convert_integers(bID);
+    } while (int_bID == -1);
+    
+    logged_in->returnBook(int_mID, int_bID);
     cout << endl;
 }
 
-bool check_member_id(int mID)
-{
-    if (members.empty())
-        return false;
-    
-    for(int i = 0; i < (int) members.size(); i++){
-        if(members[i].getMemberId() == to_string(mID)){
-            cout << "Member ID was already used, please enter a different one...\n\n";
-            return true;
-        }
-    }
-
-    return false;
-}
 bool check_staff_id(int sID)
 {
     if (librarians.empty())
