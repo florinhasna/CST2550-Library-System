@@ -43,8 +43,8 @@ std::string Date::getDueDate(){
     }
 
     // if changes month
-    if (this->day + 2 > days_in_month){
-        this->day = this->day + 2 - days_in_month;
+    if (this->day + 3 > days_in_month){
+        this->day = this->day + 3 - days_in_month;
         this->month = this->month + 1;
 
         // if changes year
@@ -53,7 +53,7 @@ std::string Date::getDueDate(){
             this->month = 1;
         }
     } else {
-        this->day = this->day + 2; 
+        this->day = this->day + 3; 
     }
 
     result.append(std::to_string(this->day));
@@ -65,6 +65,10 @@ std::string Date::getDueDate(){
     return result;
 }
 
+int Date::getDay(){
+    return this->day;
+}
+
 // constructor
 Book::Book(int bookID, std::string bookName, std::string authorFirstName, std::string authorLastName)
 {
@@ -72,6 +76,7 @@ Book::Book(int bookID, std::string bookName, std::string authorFirstName, std::s
     this->bookName = bookName;
     this->authorFirstName = authorFirstName;
     this->authorLastName = authorLastName;
+    this->borrower = nullptr;
 }
 
 // destructor
@@ -123,10 +128,11 @@ void Book::returnBook()
 void Book::borrowBook(Member& borrower, Date dueDate)
 {
     if(this->borrower != nullptr){
+        std::cout << "Book was already issued to someone else...\n\n";
+        throw std::invalid_argument("Already borrowed");
+    } else {
         this->borrower = &borrower;
         this->dueDate = dueDate;
-    } else {
-        throw std::invalid_argument("Already borrowed");
     }
 }
 

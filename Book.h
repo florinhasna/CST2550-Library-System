@@ -1,10 +1,12 @@
 #ifndef _BOOK_H_
 #define _BOOK_H_
+#include <iostream>
 #include <string>
 #include <ctime>
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
+#include <regex>
 
 class Member;
 
@@ -15,6 +17,7 @@ struct Date{
 
     std::string getCurrentDay();
     std::string getDueDate();
+    int getDay();
 };
 
 class Book
