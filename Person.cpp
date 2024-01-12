@@ -202,7 +202,7 @@ void Librarian::returnBook(int memberID, int bookID)
             }
         }
 
-        cout << "The book was not borrowed by this member...\n";
+        cout << "The book was not borrowed by this member to be returned...\n";
     } else {
         cout << "MemberID is invalid, try again...\n";
         return;
@@ -246,6 +246,11 @@ void Librarian::calcFine(int memberID)
         Date today_date;
         today_date.getCurrentDay(); // initialize with current date
         vector<Book*> borrowed = members[member_position].getBooksBorrowed();
+
+        if(borrowed.empty()){
+            cout << "\n" << members[member_position].getName() << " does not have any borrowed books currently...\n";
+            return;
+        }
 
         for(int j = 0; j < (int) borrowed.size(); j++){
             vector<int> date;
