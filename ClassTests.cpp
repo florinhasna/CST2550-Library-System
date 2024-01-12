@@ -20,6 +20,12 @@ TEST_CASE("Class construction", "[class created]")
     REQUIRE(aLibrarian.getEmail() == "gh435@live.mdx.ac.uk");
     REQUIRE(aLibrarian.getSalary() == 100000);
 
+    Member aMember(1990, "Tikou Hyseni", "35 Hendon Way, NW9 7JN", "tikou@live.mdx.ac.uk");
+    REQUIRE(aLibrarian.getStaffID() == 1990);
+    REQUIRE(aLibrarian.getName() == "Tikou Hyseni");
+    REQUIRE(aLibrarian.getAddress() == "35 Hendon Way, NW9 7JN");
+    REQUIRE(aLibrarian.getEmail() == "tikou@live.mdx.ac.uk");
+
     Book aBook(199, "The Hobbit", "John", "RR Tolkien");
     REQUIRE(aBook.getBookID() == "199");
     REQUIRE(aBook.getBookName() == "The Hobbit");
