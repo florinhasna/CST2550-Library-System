@@ -141,22 +141,38 @@ void add_librarian()
     // declare neccessary variables
     int sID, salary;
     string name, address, email;
+    regex name_pattern("^[A-Za-z]{3,}\\s[A-Za-z]{3,}$");
+    regex address_pattern("^[1-9]+\\s[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\,\\s[A-Z0-9]{2,}\\s[A-Z0-9]{3,3}$");
+    regex email_pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
     // read in librarian details
-    cout << "Enter a unique staff ID: ";
-    cin >> sID;
+    do{
+        cout << "Enter a four numbers long unique staff ID: ";
+        cin >> sID;
+    } while (!(sID > 999 && sID < 10000));
+
     cin.ignore();
-    cout << "Enter name: ";
-    getline(cin, name);
 
-    cout << "Enter address: ";
-    getline(cin, address);
-
-    cout << "Enter E-Mail: ";
-    getline(cin, email);
-
-    cout << "Enter salary: ";
-    cin >> salary;
+    do {
+        cout << "Enter full name: ";
+        getline(cin, name);
+    } while(!regex_match(name, name_pattern));
+    
+    do{
+        cout << "Enter first line of address and postcode in capitals separated by a coma...\n";
+        cout << "e.g.: 35 Hendon Way, NW9 7FJ -> Waiting input: ";
+        getline(cin, address);
+    } while (!regex_match(address, address_pattern));
+    
+    do {
+        cout << "Enter a valid E-Mail: ";
+        getline(cin, email);
+    } while (!regex_match(email, email_pattern));
+    
+    do{
+        cout << "Enter annual salary: ";
+        cin >> salary;
+    } while (!(salary > 1000));
 
     librarians.push_back(Librarian(sID, name, address, email, salary));
 
