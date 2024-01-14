@@ -5,6 +5,7 @@ vector<Book> books;
 // constructor
 Book::Book(int bookID, string bookName, string authorFirstName, string authorLastName)
 {
+    // loading relevant data
     this->bookID = bookID;
     this->bookName = bookName;
     this->authorFirstName = authorFirstName;
@@ -41,17 +42,19 @@ string Book::getAuthorLastName()
     return authorLastName;
 }
 
+// return Date struct member "dueDate"
 Date Book::getDueDate()
 {
     return dueDate;
 }
 
+// set Date structe member "dueDate", which is current day + 3
 void Book::setDueDate(Date dueDate)
 {
     this->dueDate = dueDate;
 }
 
-// book is not borrowed by anyone
+// set the book as not borrowed by anyone upon returning
 void Book::returnBook()
 {
     this->borrower = nullptr;
@@ -60,9 +63,9 @@ void Book::returnBook()
 // set borrower and dueDate
 void Book::borrowBook(Member& borrower, Date dueDate)
 {
-    if(this->borrower != nullptr){
+    if(this->borrower != nullptr){ // if already borrowed by someone else, throw exception
         throw invalid_argument("Already borrowed");
-    } else {
+    } else { // otherwise issue to the member that requested it
         this->borrower = &borrower;
         this->dueDate = dueDate;
     }

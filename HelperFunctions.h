@@ -12,16 +12,19 @@
 #include <sstream>
 using namespace std;
 
+// Date structure to import and store system dat
 struct Date{
     int year;
     int month;
     int day;
 
+    // returns current date
     string getCurrentDay();
+    // returns current date + 3 representing date when the book should be returned
     string getDueDate();
-    int getDay();
 };
 
+// initializing needed classes
 class Person;
 class Member;
 class Book;
