@@ -28,8 +28,8 @@ void load_books() // loading books from csv file to books vector
             // if not, prompting the user to insert the name of the file
             cerr << "Error opening the file, the name of the file was altered or moved.\n" <<" Specify the name or path..." << endl;
             cout << "DO NOT INCLUDE THE FILE FORMAT! Waiting input: ";
-            booksFile.open(file.append(".csv")); // attach format
             cin >> file;
+            booksFile.open(file.append(".csv")); // attach format
         }
     } while(!booksFile.is_open()); // until right input is given
 

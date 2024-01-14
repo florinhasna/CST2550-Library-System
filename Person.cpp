@@ -117,7 +117,7 @@ void Librarian::addMember()
 
     // read in member details
     do{
-        cout << "Enter a four numbers long unique staff ID: ";
+        cout << "Enter a four numbers long unique member ID: ";
         getline(cin, mID);
         int_mID = read_and_convert_integers(mID); // check and return int number, if -1, then is not valid
     } while (!(int_mID > 999 && int_mID < 10000) || check_member_id(int_mID));
